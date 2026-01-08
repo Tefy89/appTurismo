@@ -51,8 +51,7 @@ export class TourGuideLanguageEntity {
   enabled: boolean;
 
   /** Inverse Relationship **/
-  @OneToMany(() => ClassificationEntity, (entity) => entity.activity)
-  classifications: ClassificationEntity[];
+  
 
   /** Foreign Keys **/
   @ManyToOne(() => TourGuideEntity, { nullable: true })
