@@ -67,7 +67,7 @@ export class ActivityEntity {
 
   /** Columns **/
   @Column({
-    name: 'name',
+    name: 'code',
     type: 'varchar',
     comment: 'Codigo',
   })
