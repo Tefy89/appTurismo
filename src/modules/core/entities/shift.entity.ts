@@ -38,10 +38,6 @@ export class ShiftEntity {
   })
   deletedAt: Date;
 
-  /** Inverse Relationship **/
-  @OneToMany(() => PlaceSchedulesEntity, (schedule) => schedule.shift)
-  schedules: PlaceSchedulesEntity[];
-
   @Column({
     name: 'enabled',
     type: 'boolean',
@@ -49,6 +45,9 @@ export class ShiftEntity {
     comment: 'true=visible, false=no visible',
   })
   enabled: boolean;
+  /** Inverse Relationship **/
+  @OneToMany(() => PlaceSchedulesEntity, (schedule) => schedule.shift)
+  schedules: PlaceSchedulesEntity[];
 
   /** Columns **/
   @Column({

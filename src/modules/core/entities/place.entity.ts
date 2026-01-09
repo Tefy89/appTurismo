@@ -12,6 +12,8 @@ import {
 import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
 import { PlaceSchedulesEntity } from './place_schedule.entity';
 import { SocialNetworkEntity } from './social_network.entity';
+import { PlaceStyleEntity } from './place-style.entity';
+import { EntranceFeeEntity } from './entrance-fee.entity';
 
 @Entity('places', { schema: 'core' })
 export class PlaceEntity {
@@ -57,18 +59,24 @@ export class PlaceEntity {
   @OneToMany(() => PlaceSchedulesEntity, (schedule) => schedule.place)
   schedules: PlaceSchedulesEntity[];
 
+  @OneToMany(() => PlaceStyleEntity, (placeStyle) => placeStyle.place)
+  placeStyles: PlaceStyleEntity[];
+
+  @OneToMany(() => EntranceFeeEntity, (entranceFee) => entranceFee.place)
+  entranceFees: EntranceFeeEntity[];
+
   /** Foreign Keys — Catalogue **/
   @ManyToOne(() => CatalogueEntity)
-  @JoinColumn({ name: 'category_id' })
-  category: CatalogueEntity;
+  @JoinColumn({ name: 'place_category_id' })
+  placeCategory: CatalogueEntity;
 
   @Column({
-    name: 'category_id',
+    name: 'place_category_id',
     type: 'uuid',
     nullable: false,
-    comment: 'Llave foranea de la tabla catalogue (category)',
+    comment: 'Llave foranea de la tabla catalogue (place_category)',
   })
-  categoryId: string;
+  placeCategoryId: string;
 
   @ManyToOne(() => CatalogueEntity)
   @JoinColumn({ name: 'religious_order_id' })

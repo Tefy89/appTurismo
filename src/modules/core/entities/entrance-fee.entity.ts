@@ -10,7 +10,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
-import { ClassificationEntity } from '@modules/core/entities/classification.entity';
 import { PlaceEntity } from './place.entity';
 
 @Entity('entrance_fees', { schema: 'core' })
@@ -51,7 +50,6 @@ export class EntranceFeeEntity {
   enabled: boolean;
 
   /** Inverse Relationship **/
-  
 
   /** Foreign Keys **/
   @ManyToOne(() => PlaceEntity, { nullable: true })
@@ -64,6 +62,18 @@ export class EntranceFeeEntity {
     comment: 'Lugar Turistico',
   })
   placeId: string;
+
+  @ManyToOne(() => CatalogueEntity)
+  @JoinColumn({ name: 'visitor_type_id' })
+  visitorType: CatalogueEntity;
+
+  @Column({
+    name: 'visitor_type_id',
+    type: 'uuid',
+    nullable: false,
+    comment: 'Tipo de visitante',
+  })
+  visitorTypeId: string;
 
   /** Columns **/
   @Column({

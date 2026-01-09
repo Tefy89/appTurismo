@@ -5,12 +5,9 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
-import { ClassificationEntity } from '@modules/core/entities/classification.entity';
 import { PlaceEntity } from './place.entity';
 
 @Entity('place_styles', { schema: 'core' })
@@ -51,12 +48,11 @@ export class PlaceStyleEntity {
   enabled: boolean;
 
   /** Inverse Relationship **/
-  
 
   /** Foreign Keys **/
   @ManyToOne(() => PlaceEntity, { nullable: true })
   @JoinColumn({ name: 'place_id' })
-  geographicArea: PlaceEntity;
+  place: PlaceEntity;
   @Column({
     type: 'uuid',
     name: 'place_id',
@@ -66,5 +62,4 @@ export class PlaceStyleEntity {
   placeId: string;
 
   /** Columns **/
-  
 }
