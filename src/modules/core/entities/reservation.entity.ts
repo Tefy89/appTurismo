@@ -11,12 +11,11 @@ import {
 } from 'typeorm';
 import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
 import { ClassificationEntity } from '@modules/core/entities/classification.entity';
-import { UserEntity } from '@auth/entities';
-import { TourGuideLanguageEntity } from './tour-guide-languaje.entity';
-import { GuideCertificationEntity } from './guide-certification.entity';
+import { TouristRouteEntity } from './tourist-route.entity';
+import { TourGuideEntity } from './tour-guide.entity';
 
-@Entity('tour-guides', { schema: 'core' })
-export class TourGuideEntity {
+@Entity('reservations', { schema: 'core' })
+export class ReservationEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -53,36 +52,63 @@ export class TourGuideEntity {
   enabled: boolean;
 
   /** Inverse Relationship **/
-  @OneToMany(() => TourGuideLanguageEntity, (entity) => entity.tourGuide)
-  languages: TourGuideLanguageEntity[];
-
-  @OneToMany(() => GuideCertificationEntity, (guide_certification) => guide_certification.guide)
-  certifications: GuideCertificationEntity[];
 
   /** Foreign Keys **/
-  @ManyToOne(() => UserEntity, { nullable: true })
-  @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
+  @ManyToOne(() => TouristRouteEntity)
+  @JoinColumn({ name: 'route_id' })
+  route: TouristRouteEntity;
   @Column({
     type: 'uuid',
-    name: 'user_id',
+    name: 'route_id',
     nullable: true,
-    comment: 'Usuario asociado al guia turistico',
+    comment: 'Foreign key de la ruta turistica',
   })
-  userId: string;
+  routeId: string;
+
+  @ManyToOne(() => TourGuideEntity)
+  @JoinColumn({ name: 'tour_guide_id' })
+  tourGuide: TourGuideEntity;
+  @Column({
+    type: 'uuid',
+    name: 'tour_guide_id',
+    nullable: true,
+    comment: 'Foreign key de la guía turística',
+  })
+  tourGuideId: string;
 
   /** Columns **/
   @Column({
-    name: 'available',
-    type: 'boolean',
-    comment: 'Disponibilidad del guia',
+    name: 'date',
+    type: 'date',
+    comment: 'Fecha',
   })
-  available: boolean;
+  date: Date;
 
   @Column({
-    name: 'hourly_rate',
-    type: 'float',
-    comment: 'Tarifa por hora',
+    name: 'time',
+    type: 'time',
+    comment: 'Hora',
   })
-  hourlyRate: number;
+  time: string;
+
+  @Column({
+    name: 'total_cost',
+    type: 'float',
+    comment: 'Costo total',
+  })
+  totalCost: number;
+
+  @Column({
+    name: 'status',
+    type: 'varchar',
+    comment: 'Estado',
+  })
+  status: string;
+
+  @Column({
+    name: 'id_temp',
+    type: 'bigint',
+    comment: 'Codigo de la tabla migrada',
+  })
+  idTemp: number;
 }

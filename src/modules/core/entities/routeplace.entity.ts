@@ -11,12 +11,11 @@ import {
 } from 'typeorm';
 import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
 import { ClassificationEntity } from '@modules/core/entities/classification.entity';
-import { UserEntity } from '@auth/entities';
-import { TourGuideLanguageEntity } from './tour-guide-languaje.entity';
-import { GuideCertificationEntity } from './guide-certification.entity';
+import { TouristRouteEntity } from './tourist-route.entity';
+import { PlaceEntity } from './place.entity';
 
-@Entity('tour-guides', { schema: 'core' })
-export class TourGuideEntity {
+@Entity('routes_places', { schema: 'core' })
+export class RoutePlaceEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -53,36 +52,41 @@ export class TourGuideEntity {
   enabled: boolean;
 
   /** Inverse Relationship **/
-  @OneToMany(() => TourGuideLanguageEntity, (entity) => entity.tourGuide)
-  languages: TourGuideLanguageEntity[];
-
-  @OneToMany(() => GuideCertificationEntity, (guide_certification) => guide_certification.guide)
-  certifications: GuideCertificationEntity[];
 
   /** Foreign Keys **/
-  @ManyToOne(() => UserEntity, { nullable: true })
-  @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
+  @ManyToOne(() => TouristRouteEntity, { nullable: true })
+  @JoinColumn({ name: 'route_id' })
+  route: TouristRouteEntity;
   @Column({
     type: 'uuid',
-    name: 'user_id',
+    name: 'route_id',
     nullable: true,
-    comment: 'Usuario asociado al guia turistico',
+    comment: 'Foreign key de la ruta turística',
   })
-  userId: string;
+  routeId: string;
 
+  @ManyToOne(() => PlaceEntity)
+  @JoinColumn({ name: 'place_id' })
+  place: PlaceEntity;
+  @Column({
+    type: 'uuid',
+    name: 'place_id',
+    nullable: true,
+    comment: 'Foreign key del lugar',
+  })
+  placeId: string;
   /** Columns **/
   @Column({
-    name: 'available',
-    type: 'boolean',
-    comment: 'Disponibilidad del guia',
+    name: 'visitOrder',
+    type: 'number',
+    comment: 'Orden de visita',
   })
-  available: boolean;
+  visitOrder: number;
 
   @Column({
-    name: 'hourly_rate',
-    type: 'float',
-    comment: 'Tarifa por hora',
+    name: 'id_temp',
+    type: 'bigint',
+    comment: 'Codigo de la tabla migrada',
   })
-  hourlyRate: number;
+  idTemp: number;
 }

@@ -11,12 +11,11 @@ import {
 } from 'typeorm';
 import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
 import { ClassificationEntity } from '@modules/core/entities/classification.entity';
-import { UserEntity } from '@auth/entities';
-import { TourGuideLanguageEntity } from './tour-guide-languaje.entity';
-import { GuideCertificationEntity } from './guide-certification.entity';
+import { RoutePlaceEntity } from './routeplace.entity';
+import { ReservationEntity } from './reservation.entity';
 
-@Entity('tour-guides', { schema: 'core' })
-export class TourGuideEntity {
+@Entity('tourist_routes', { schema: 'core' })
+export class TouristRouteEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -52,37 +51,45 @@ export class TourGuideEntity {
   })
   enabled: boolean;
 
-  /** Inverse Relationship **/
-  @OneToMany(() => TourGuideLanguageEntity, (entity) => entity.tourGuide)
-  languages: TourGuideLanguageEntity[];
+  @OneToMany(() => RoutePlaceEntity, (routePlace) => routePlace.route)
+  routePlaces: RoutePlaceEntity[];
 
-  @OneToMany(() => GuideCertificationEntity, (guide_certification) => guide_certification.guide)
-  certifications: GuideCertificationEntity[];
-
-  /** Foreign Keys **/
-  @ManyToOne(() => UserEntity, { nullable: true })
-  @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
-  @Column({
-    type: 'uuid',
-    name: 'user_id',
-    nullable: true,
-    comment: 'Usuario asociado al guia turistico',
-  })
-  userId: string;
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.route)
+  reservations: ReservationEntity[];
 
   /** Columns **/
   @Column({
-    name: 'available',
-    type: 'boolean',
-    comment: 'Disponibilidad del guia',
+    name: 'name',
+    type: 'varchar',
+    comment: 'Nombre de la ruta',
   })
-  available: boolean;
+  name: string;
 
   @Column({
-    name: 'hourly_rate',
-    type: 'float',
-    comment: 'Tarifa por hora',
+    name: 'description',
+    type: 'text',
+    comment: 'Descripcion de la ruta',
   })
-  hourlyRate: number;
+  description: string;
+
+  @Column({
+    name: 'duration',
+    type: 'float',
+    comment: 'Duración de la ruta',
+  })
+  duration: number;
+
+  @Column({
+    name: 'created_on',
+    type: 'float',
+    comment: 'Fecha de creacion de la ruta',
+  })
+  createdOn: number;
+
+  @Column({
+    name: 'id_temp',
+    type: 'bigint',
+    comment: 'Codigo de la tabla migrada',
+  })
+  idTemp: number;
 }

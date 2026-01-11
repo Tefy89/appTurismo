@@ -14,6 +14,7 @@ import { PlaceSchedulesEntity } from './place_schedule.entity';
 import { SocialNetworkEntity } from './social_network.entity';
 import { PlaceStyleEntity } from './place-style.entity';
 import { EntranceFeeEntity } from './entrance-fee.entity';
+import { RoutePlaceEntity } from './routeplace.entity';
 
 @Entity('places', { schema: 'core' })
 export class PlaceEntity {
@@ -64,6 +65,9 @@ export class PlaceEntity {
 
   @OneToMany(() => EntranceFeeEntity, (entranceFee) => entranceFee.place)
   entranceFees: EntranceFeeEntity[];
+
+  @OneToMany(() => RoutePlaceEntity, (routePlace) => routePlace.place)
+  routePlaces: RoutePlaceEntity[];
 
   /** Foreign Keys — Catalogue **/
   @ManyToOne(() => CatalogueEntity)

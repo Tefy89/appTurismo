@@ -10,13 +10,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CatalogueEntity } from '@modules/common/catalogue/catalogue.entity';
-import { ClassificationEntity } from '@modules/core/entities/classification.entity';
-import { UserEntity } from '@auth/entities';
-import { TourGuideLanguageEntity } from './tour-guide-languaje.entity';
-import { GuideCertificationEntity } from './guide-certification.entity';
+import { TourGuideEntity } from './tour-guide.entity';
 
-@Entity('tour-guides', { schema: 'core' })
-export class TourGuideEntity {
+@Entity('guide_certifications', { schema: 'core' })
+export class GuideCertificationEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -52,37 +49,48 @@ export class TourGuideEntity {
   })
   enabled: boolean;
 
-  /** Inverse Relationship **/
-  @OneToMany(() => TourGuideLanguageEntity, (entity) => entity.tourGuide)
-  languages: TourGuideLanguageEntity[];
-
-  @OneToMany(() => GuideCertificationEntity, (guide_certification) => guide_certification.guide)
-  certifications: GuideCertificationEntity[];
-
   /** Foreign Keys **/
-  @ManyToOne(() => UserEntity, { nullable: true })
-  @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
+  @ManyToOne(() => TourGuideEntity)
+  @JoinColumn({ name: 'guide_id' })
+  guide: TourGuideEntity;
   @Column({
     type: 'uuid',
-    name: 'user_id',
+    name: 'guide_id',
     nullable: true,
-    comment: 'Usuario asociado al guia turistico',
+    comment: 'Guía turístico',
   })
-  userId: string;
+  guideId: string;
+
+  @ManyToOne(() => CatalogueEntity)
+  @JoinColumn({ name: 'certification_id' })
+  certification: CatalogueEntity;
+  @Column({
+    type: 'uuid',
+    name: 'certification_id',
+    nullable: true,
+    comment: 'Certificación',
+  })
+  certificationId: string;
 
   /** Columns **/
   @Column({
-    name: 'available',
-    type: 'boolean',
-    comment: 'Disponibilidad del guia',
+    name: 'issued_at',
+    type: 'date',
+    comment: 'Fecha de emisión',
   })
-  available: boolean;
+  issuedAt: Date;
 
   @Column({
-    name: 'hourly_rate',
-    type: 'float',
-    comment: 'Tarifa por hora',
+    name: 'expired_at',
+    type: 'date',
+    comment: 'Fecha de vencimiento',
   })
-  hourlyRate: number;
+  expiredAt: Date;
+
+  @Column({
+    name: 'id_temp',
+    type: 'bigint',
+    comment: 'Codigo de la tabla migrada',
+  })
+  idTemp: number;
 }
